@@ -1,23 +1,38 @@
 #ifndef AVL_TREE_H
 #define AVL_TREE_H
 
-template<template K, template V>
+template<typename K, typename V>
 struct Node{
+    Node();
+    Node(K, V);
+
     K key;
     V value;
     Node<K, V>* left;
-    Node<K, V>* right
+    Node<K, V>* right;
+    int height;
 };
 
-template<typename T>
-class avl_tree
+template<typename K, typename V>
+class Map
 {
     public:
-        avl_tree();
+        Map();
+        ~Map();
+        Map(const Map&);
+        Map& operator=(const Map&);
+
+
+        bool isEmpty() const;
+        bool put(K, V);
+        bool remove(K);
+        bool contains(K);
+        bool containsValue(V);
 
 
     private:
-        Node<T> root;
+        Node<K, V>* root;
+
 
 };
 
