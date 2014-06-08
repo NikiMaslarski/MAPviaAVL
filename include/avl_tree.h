@@ -42,7 +42,6 @@ public:
     Node<K, V>* left;
     Node<K, V>* right;
     int height;
-
 };
 
 
@@ -132,7 +131,12 @@ bool Map<K, V>::put(K key_, V value_)
 
 template<typename K, typename V>
 bool Map<K, V>::contains(K key_) const{
-    return root->left->contains(key_)
+    if(this->key == key_)
+        return true;
+    else if(this == NULL)
+        return false;
+
+    return (left->contains(key_) || right->contains(key_));
 }
 
 #endif // AVL_TREE_H
