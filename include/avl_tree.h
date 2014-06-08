@@ -35,7 +35,7 @@ public:
     {
     }
 
-
+// DATA MEMBERS
 public:
     K key;
     V value;
@@ -44,6 +44,8 @@ public:
     int height;
 
 };
+
+
 
 template<typename K, typename V>
 class Map
@@ -60,12 +62,15 @@ class Map
         bool isEmpty() const;
         bool put(K, V);
         bool remove(K);
-        bool contains(K);
-        bool containsValue(V);
+        bool contains(K) const;
+        bool containsValue(V) const;
 
     private:
         Node<K, V>* root;
+
         void free(Node<K, V>*);
+        Map<K, V> getLeftTree() const;
+        Map<K, V> getRightTree() const;
 };
 
 
@@ -108,7 +113,6 @@ bool Map<K, V>::put(K key_, V value_)
     Node<K, V>* temp = new Node<K, V>;
     Node<K, V>* iterTemp = root;
 
-
     while(iterTemp != NULL){
         if(iterTemp->key < key_)
             iterTemp = iterTemp->right;
@@ -125,5 +129,10 @@ bool Map<K, V>::put(K key_, V value_)
     return true;
 }
 
+
+template<typename K, typename V>
+bool Map<K, V>::contains(K key_) const{
+    return root->left->contains(key_)
+}
 
 #endif // AVL_TREE_H
