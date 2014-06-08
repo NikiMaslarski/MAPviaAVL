@@ -19,8 +19,6 @@ struct Node{
 public:
     // Default CTOR
     Node():
-    key(K()),
-    value(V()),
     left(NULL),
     right(NULL),
     height(0)
@@ -28,7 +26,7 @@ public:
     }
 
     //Ctor
-    Node(K key_, V value_, Node<K, V> l, Node<K, V> r):
+    Node(K key_, V value_, Node<K, V> l = NULL, Node<K, V> r = NULL):
     height(1),
     key(key_),
     value(value_),
@@ -51,7 +49,7 @@ template<typename K, typename V>
 class Map
 {
     // STRUCTURE
-/*
+
     public:
         Map();
         ~Map();
@@ -65,35 +63,67 @@ class Map
         bool contains(K);
         bool containsValue(V);
 
-
     private:
         Node<K, V>* root;
-*/
-
-    public:
-        Map():
-        root(NULL)
-        {
-        }
-
-        bool isEmpty() const{
-            return !root;
-        }
-
-        bool put(K key_, V value_)
-        {
-            Node<K, V>* temp = new Node<K, V>;
-            if(isEmpty())
-                root = temp;
-
-            return true;
-        }
-
-
-
-    private:
-        Node<K, V>* root;
-
+        void free(Node<K, V>*);
 };
+
+
+template<typename K, typename V>
+Map<K, V>::Map():
+root(NULL)
+{
+}
+
+
+template<typename K, typename V>
+void Map<K, V>::free(Node<K, V>* n){
+
+    if(n == NULL)
+        return;
+
+    if(n->left != NULL)
+        free(n->left);
+    if(n->right != NULL)
+        free(n->right);
+
+    delete n;
+}
+
+
+template<typename K, typename V>
+Map<K, V>::~Map(){
+    free(root);
+}
+
+template<typename K, typename V>
+bool Map<K, V>::isEmpty() const{
+    return !root;
+}
+
+
+template<typename K, typename V>
+bool Map<K, V>::put(K key_, V value_)
+{
+    Node<K, V>* temp = new Node<K, V>;
+    Node<K, V>* iterTemp = root;
+
+
+    while(iterTemp != NULL){
+        if(iterTemp->key < key_)
+            iterTemp = iterTemp->right;
+
+        else if(iterTemp->key > key_)
+            iterTemp = iterTemp->left;
+
+        else if(iterTemp->key == key_)
+            return false;
+    }
+
+    iterTemp = temp;
+
+    return true;
+}
+
 
 #endif // AVL_TREE_H

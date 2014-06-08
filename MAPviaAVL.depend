@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1402225521 source:c:\users\niki\desktop\codeblocks\mapviaavl\main.cpp
+1402230447 source:c:\users\niki\desktop\codeblocks\mapviaavl\main.cpp
 	<iostream>
 	<avl_tree.h>
 
@@ -7,5 +7,5 @@
 	<iostream>
 	"avl_tree.h"
 
-1402230384 c:\users\niki\desktop\codeblocks\mapviaavl\include\avl_tree.h
+1402242159 c:\users\niki\desktop\codeblocks\mapviaavl\include\avl_tree.h
 
