@@ -3,6 +3,7 @@
 
 template<typename K, typename V>
 struct Node{
+     // STRUCTUR
     /*
     Node();
     Node(K, V, Node<K, V> l = NULL, Node<K, V> r = NULL);
@@ -13,6 +14,8 @@ struct Node{
     Node<K, V>* right;
     int height;
     */
+
+
 public:
     // Default CTOR
     Node():
@@ -47,23 +50,25 @@ public:
 template<typename K, typename V>
 class Map
 {
-//    public:
-//        Map();
-//        ~Map();
-//        Map(const Map&);
-//        Map& operator=(const Map&);
-//
-//
-//        bool isEmpty() const;
-//
-//        bool put(K, V);
-//        bool remove(K);
-//        bool contains(K);
-//        bool containsValue(V);
-//
-//
-//    private:
-//        Node<K, V>* root;
+    // STRUCTURE
+/*
+    public:
+        Map();
+        ~Map();
+        Map(const Map&);
+        Map& operator=(const Map&);
+
+
+        bool isEmpty() const;
+        bool put(K, V);
+        bool remove(K);
+        bool contains(K);
+        bool containsValue(V);
+
+
+    private:
+        Node<K, V>* root;
+*/
 
     public:
         Map():
@@ -71,9 +76,19 @@ class Map
         {
         }
 
-    bool isEmpty() const{
-        return !root;
-    }
+        bool isEmpty() const{
+            return !root;
+        }
+
+        bool put(K key_, V value_)
+        {
+            Node<K, V>* temp = new Node<K, V>;
+            if(isEmpty())
+                root = temp;
+
+            return true;
+        }
+
 
 
     private:
