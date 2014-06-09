@@ -19,17 +19,17 @@ struct Node{
 public:
     // Default CTOR
     Node():
-    left(NULL),
-    right(NULL),
-    height(0)
+     left(NULL),
+     right(NULL),
+     height(0)
     {
     }
 
     //Ctor
     Node(K key_, V value_):
-    height(1),
-    key(key_),
-    value(value_)
+     height(1),
+     key(key_),
+     value(value_)
     {
     }
 
@@ -68,12 +68,14 @@ class Map
 
         void free(Node<K, V>*);
         bool find(Node<K, V>*, K) const;
+
+        bool putR(Node<K, V>*&, K, V);
 };
 
 
 template<typename K, typename V>
 Map<K, V>::Map():
-root(NULL)
+    root(NULL)
 {
 }
 
@@ -94,9 +96,27 @@ void Map<K, V>::free(Node<K, V>* n){
 
 
 template<typename K, typename V>
+bool Map<K, V>::putR(Node<K, V>*& n, K key_, V value_){
+    if( n == NULL){
+        n = new Node<K, V>(key_, value_);
+        return true;
+    }
+    else if( n->key < key_){
+        return putR(n->right, key_, value_);
+    }
+    else if( n->key > key_){
+        return putR(n->left, key_, value_);
+    }
+    else if(n->key == key_)
+        return false;
+}
+
+
+template<typename K, typename V>
 Map<K, V>::~Map(){
     free(root);
 }
+
 
 template<typename K, typename V>
 bool Map<K, V>::isEmpty() const{
@@ -120,27 +140,7 @@ bool Map<K, V>::find(Node<K, V>* n, K key_) const{
 template<typename K, typename V>
 bool Map<K, V>::put(K key_, V value_)
 {
-    if(root == NULL){
-        root = new Node<K, V>(key_, value_);
-    }
-    else{
-        Node<K, V>* temp = root;
-        while(temp != NULL){
-            if(temp->key < key_){
-                ++temp->height;
-                temp = temp->right;
-            }
-            else if(temp->key > key_){
-                temp = temp->left;
-                ++temp->height;
-            }
-            else if(temp->key == key_)
-                return false;
-        }
-        temp = new Node<K, V>(key_, value_);
-    }
-
-    return true;
+    return putR(root, key_, value_);
 }
 
 
