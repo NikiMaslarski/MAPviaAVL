@@ -6,7 +6,7 @@ struct Node{
      // STRUCTUR
     /*
     Node();
-    Node(K, V, Node<K, V> l = NULL, Node<K, V> r = NULL);
+    Node(K, V);
 
     K key;
     V value;
@@ -123,17 +123,29 @@ bool Map<K, V>::put(K key_, V value_)
     if(root == NULL){
         root = new Node<K, V>(key_, value_);
     }
+    else{
+        Node<K, V>* temp = root;
+        while(temp != NULL){
+            if(temp->key < key_){
+                ++temp->height;
+                temp = temp->right;
+            }
+            else if(temp->key > key_){
+                temp = temp->left;
+                ++temp->height;
+            }
+            else if(temp->key == key_)
+                return false;
+        }
+        temp = new Node<K, V>(key_, value_);
+    }
+
     return true;
 }
 
-//
+
 //template<typename K, typename V>
 //bool Map<K, V>::contains(K key_) const{
-//    if(this->key == key_)
-//        return true;
-//    else if(this == NULL)
-//        return false;
-//
 //}
 
 
