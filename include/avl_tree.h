@@ -26,12 +26,10 @@ public:
     }
 
     //Ctor
-    Node(K key_, V value_, Node<K, V> l = NULL, Node<K, V> r = NULL):
+    Node(K key_, V value_):
     height(1),
     key(key_),
-    value(value_),
-    left(l),
-    right(r)
+    value(value_)
     {
     }
 
@@ -58,6 +56,7 @@ class Map
         Map& operator=(const Map&);
 
 
+
         bool isEmpty() const;
         bool put(K, V);
         bool remove(K);
@@ -68,8 +67,7 @@ class Map
         Node<K, V>* root;
 
         void free(Node<K, V>*);
-        Map<K, V> getLeftTree() const;
-        Map<K, V> getRightTree() const;
+        bool find(Node<K, V>*, K) const;
 };
 
 
@@ -102,41 +100,41 @@ Map<K, V>::~Map(){
 
 template<typename K, typename V>
 bool Map<K, V>::isEmpty() const{
-    return !root;
+    return root == NULL;
+}
+
+
+template<typename K, typename V>
+bool Map<K, V>::find(Node<K, V>* n, K key_) const{
+    if( n == NULL)
+        return false;
+    if(n->key < key_)
+        return find(n->right);
+    if(n->key > key_)
+        return find(n->left);
+    else
+        return true;
 }
 
 
 template<typename K, typename V>
 bool Map<K, V>::put(K key_, V value_)
 {
-    Node<K, V>* temp = new Node<K, V>;
-    Node<K, V>* iterTemp = root;
-
-    while(iterTemp != NULL){
-        if(iterTemp->key < key_)
-            iterTemp = iterTemp->right;
-
-        else if(iterTemp->key > key_)
-            iterTemp = iterTemp->left;
-
-        else if(iterTemp->key == key_)
-            return false;
+    if(root == NULL){
+        root = new Node<K, V>(key_, value_);
     }
-
-    iterTemp = temp;
-
     return true;
 }
 
+//
+//template<typename K, typename V>
+//bool Map<K, V>::contains(K key_) const{
+//    if(this->key == key_)
+//        return true;
+//    else if(this == NULL)
+//        return false;
+//
+//}
 
-template<typename K, typename V>
-bool Map<K, V>::contains(K key_) const{
-    if(this->key == key_)
-        return true;
-    else if(this == NULL)
-        return false;
-
-    return (left->contains(key_) || right->contains(key_));
-}
 
 #endif // AVL_TREE_H
