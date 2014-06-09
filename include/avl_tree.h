@@ -67,10 +67,12 @@ class Map
     private:
         Node<K, V>* root;
 
-        void free(Node<K, V>*);
         bool find(Node<K, V>*, K) const;
 
+        void freeR(Node<K, V>*);
         bool putR(Node<K, V>*&, K, V);
+        void assistRemove(Node<K, V>*&, K);
+        void removeR(Node<K, V>*&);
 
         //Single Left Rotation
         void SLR(Node<K, V>*&);
@@ -87,15 +89,15 @@ Map<K, V>::Map():
 
 
 template<typename K, typename V>
-void Map<K, V>::free(Node<K, V>* n){
+void Map<K, V>::freeR(Node<K, V>* n){
 
     if(n == NULL)
         return;
 
     if(n->left != NULL)
-        free(n->left);
+        freeR(n->left);
     if(n->right != NULL)
-        free(n->right);
+        freeR(n->right);
 
     delete n;
 }
@@ -120,7 +122,7 @@ bool Map<K, V>::putR(Node<K, V>*& n, K key_, V value_){
 
 template<typename K, typename V>
 Map<K, V>::~Map(){
-    free(root);
+    freeR(root);
 }
 
 
@@ -171,5 +173,60 @@ void Map<K, V>::SLR(Node<K, V>*& n){
 template<typename K, typename V>
 void Map<K, V>::SRR(Node<K, V>*& n){
 
+    Node<K, V>& temp = n->left->right;
+    n->left->right = n;
+    n = n->left;
+    n->right->left = temp;
 }
+
+
+template<typename K, typename V>
+bool Map<K, V>::remove(K key_){
+    if(!contains(key_))
+        return false;
+
+    assistRemove(root, key_);
+    return true;
+}
+
+
+//Finds the element for Remove
+template<typename K, typename V>
+void Map<K, V>::assistRemove(Node<K, V>*& n, K key_){
+    if(n->key == key_){
+        removeR(n);
+    }
+
+    if(n->key < key_)
+        assistRemove(n->right, key_);
+    if(n->key > key_)
+        assistRemove(n->left, key_);
+}
+
+
+//Removes Root Element
+template<typename K, typename V>
+void Map<K, V>::removeR(Node<K, V>*& n){
+
+    if(n->left == NULL)
+        n = n->right;
+
+    else{
+        Node<K, V>*& prev = n->left;
+        while(n->right != NULL){
+            prev = prev->right;
+        }
+
+        Node<K, V>*& temp = prev;
+        temp = temp->left;
+        prev->left = n->left;
+        prev->right = n->right;
+
+        delete n;
+        n = prev;
+    }
+}
+
+
+
 #endif // AVL_TREE_H
