@@ -29,7 +29,9 @@ public:
     Node(K key_, V value_):
      height(1),
      key(key_),
-     value(value_)
+     value(value_),
+     left(NULL),
+     right(NULL)
     {
     }
 
