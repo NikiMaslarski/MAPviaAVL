@@ -21,13 +21,13 @@ public:
     Node():
      left(NULL),
      right(NULL),
-     height(0)
+     balance(0)
     {
     }
 
     //Ctor
     Node(K key_, V value_):
-     height(1),
+     balance(0),
      key(key_),
      value(value_),
      left(NULL),
@@ -41,7 +41,7 @@ public:
     V value;
     Node<K, V>* left;
     Node<K, V>* right;
-    int height;
+    int balance;
 };
 
 
@@ -49,7 +49,6 @@ public:
 template<typename K, typename V>
 class Map
 {
-    // STRUCTURE
 
     public:
         Map();
@@ -72,6 +71,11 @@ class Map
         bool find(Node<K, V>*, K) const;
 
         bool putR(Node<K, V>*&, K, V);
+
+        //Single Left Rotation
+        void SLR(Node<K, V>*&);
+        //Single Right Rotation
+        void SRR(Node<K, V>*&);
 };
 
 
@@ -146,9 +150,26 @@ bool Map<K, V>::put(K key_, V value_)
 }
 
 
-//template<typename K, typename V>
-//bool Map<K, V>::contains(K key_) const{
-//}
+template<typename K, typename V>
+bool Map<K, V>::contains(K key_) const{
+    return find(root, key_);
+}
 
 
+//Single Left Rotation
+template<typename K, typename V>
+void Map<K, V>::SLR(Node<K, V>*& n){
+
+    Node<K, V>& temp = n->right->left;
+    n->right->left = n;
+    n = n->right;
+    n->left->right = temp;
+}
+
+
+//Single Right Rotation
+template<typename K, typename V>
+void Map<K, V>::SRR(Node<K, V>*& n){
+
+}
 #endif // AVL_TREE_H
