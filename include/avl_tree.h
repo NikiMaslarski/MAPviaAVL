@@ -71,7 +71,7 @@ class Map
 
         void freeR(Node<K, V>*);
         bool putR(Node<K, V>*&, K, V);
-        void assistRemove(Node<K, V>*&, K);
+        void assistRemoveR(Node<K, V>*&, K);
         void removeR(Node<K, V>*&);
 
         //Single Left Rotation
@@ -137,9 +137,9 @@ bool Map<K, V>::find(Node<K, V>* n, K key_) const{
     if( n == NULL)
         return false;
     if(n->key < key_)
-        return find(n->right);
+        return find(n->right, key_);
     if(n->key > key_)
-        return find(n->left);
+        return find(n->left, key_);
     else
         return true;
 }
@@ -179,28 +179,28 @@ void Map<K, V>::SRR(Node<K, V>*& n){
     n->right->left = temp;
 }
 
-
+//Remove element by given key
 template<typename K, typename V>
 bool Map<K, V>::remove(K key_){
     if(!contains(key_))
         return false;
 
-    assistRemove(root, key_);
+    assistRemoveR(root, key_);
     return true;
 }
 
 
 //Finds the element for Remove
 template<typename K, typename V>
-void Map<K, V>::assistRemove(Node<K, V>*& n, K key_){
+void Map<K, V>::assistRemoveR(Node<K, V>*& n, K key_){
     if(n->key == key_){
         removeR(n);
     }
 
-    if(n->key < key_)
-        assistRemove(n->right, key_);
-    if(n->key > key_)
-        assistRemove(n->left, key_);
+    if( n!=NULL && n->key < key_)
+        assistRemoveR(n->right, key_);
+    if( n!=NULL && n->key > key_)
+        assistRemoveR(n->left, key_);
 }
 
 
@@ -208,25 +208,26 @@ void Map<K, V>::assistRemove(Node<K, V>*& n, K key_){
 template<typename K, typename V>
 void Map<K, V>::removeR(Node<K, V>*& n){
 
-    if(n->left == NULL)
+    if(n->left == NULL){
+        Node<K, V>* temp = n;
         n = n->right;
-
+        delete temp;
+    }
     else{
         Node<K, V>*& prev = n->left;
-        while(n->right != NULL){
+        while(prev->right != NULL){
             prev = prev->right;
         }
 
-        Node<K, V>*& temp = prev;
-        temp = temp->left;
-        prev->left = n->left;
-        prev->right = n->right;
+        Node<K, V>* temp = prev;
+        prev = prev->left;
+        temp->left = n->left;
+        temp->right = n->right;
 
         delete n;
-        n = prev;
+        n = temp;
     }
 }
-
 
 
 #endif // AVL_TREE_H
